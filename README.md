@@ -31,6 +31,10 @@ If you haven't seen Meteor 1.3's recommended application structure yet you may b
 
 Most of the app is in the `imports` folder. The UI is found in `imports/ui`. The API (methods, publications, schemas) can be found in `imports/api`
 
+
+## Font
+font is set in `~/client/theme.less` and currently pulls in a `<link>` tag from `~/client/main.html`. Currently set to Google Font's Open Sans.
+
 ## Other Stuff
 * [AirBnB Style Guide for React] (https://github.com/airbnb/javascript/tree/master/react)
 
