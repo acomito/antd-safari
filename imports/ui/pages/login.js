@@ -15,17 +15,6 @@ const FormItem = Form.Item;
       "marginTop": "40px",
       "padding": "20px",
     },
-    textField: {
-      display: "block",
-      width: "70%",
-      margin: "auto",
-      background: "#ffffff",
-      backgroundColor: "#ffffff",
-      marginBottom: "20px",
-    },
-    cardActionStyles: {
-      margin: "auto"
-    },
     loginButton: {
       width: '100%'
     }
@@ -62,9 +51,9 @@ const NormalLoginForm = Form.create()(React.createClass({
       <Form onSubmit={this.handleSubmit} className="login-form">
         <FormItem>
           {getFieldDecorator('emailAddress', {
-            rules: [{ required: true, message: 'Please input your username!' }],
+            rules: [{ required: true, message: 'Please input your email!' }],
           })(
-            <Input addonBefore={<Icon type="mail" />} placeholder="Username" />
+            <Input addonBefore={<Icon type="mail" />} placeholder="Email" />
           )}
         </FormItem>
         <FormItem>
@@ -74,19 +63,10 @@ const NormalLoginForm = Form.create()(React.createClass({
             <Input addonBefore={<Icon type="lock" />} type="password" placeholder="Password" />
           )}
         </FormItem>
-        <FormItem>
-          {getFieldDecorator('remember', {
-            valuePropName: 'checked',
-            initialValue: true,
-          })(
-            <Checkbox>Remember me</Checkbox>
-          )}
-          {/*<a style={{float: 'right'}}>Forgot password</a>*/}
           <Button loading={this.state.loading} type="primary" htmlType="submit" className={css(styles.loginButton)}>
             Login
           </Button>
           Or <Link to='/signup'>register now!</Link>
-        </FormItem>
       </Form>
     );
   },
@@ -94,37 +74,15 @@ const NormalLoginForm = Form.create()(React.createClass({
 
 
 
-export class Login extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = { canSubmit: false }
-    this.enableButton = this.enableButton.bind(this);
-    this.submit = this.submit.bind(this);
-    this.disableButton = this.disableButton.bind(this);
-  }
-
-  submit(data) {
-    let email = data.emailAddress;
-    let password = data.password;
-    handleLogin(email, password);
-  }
-
-  enableButton() {
-    this.setState({ canSubmit: true });
-  }
-
-  disableButton() {
-    this.setState({ canSubmit: false });
-  }
-
-  render() {
-    return (
-      <Card className={css(styles.cardStyles)} title={<p style={{textAlign: 'center'}}>Login</p>} >
-        <NormalLoginForm />
-      </Card>
-    );
-  }
+export const Login = () => {
+  return (
+    <Card 
+      className={css(styles.cardStyles)} 
+      title={<p style={{textAlign: 'center'}}>Login</p>}
+    >
+      <NormalLoginForm />
+    </Card>
+  );
 }
 
 

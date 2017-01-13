@@ -3,7 +3,9 @@
 	  	"config": {
 	      "appName": "SpaceBug",
 	      "supportEmail": "support@support.org",
-	      "supportName": "Bug"
+	      "supportName": "Bug",
+	      "analyticsOn": false,
+	      "emailOn": false
 	  	}
 	},
 	"private": {}

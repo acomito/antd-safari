@@ -2,19 +2,22 @@ import React from 'react';
 import { StyleSheet, css } from 'aphrodite';
 //import AppNavigation from '../containers/app-navigation';
 import { browserHistory, Link } from 'react-router';
-import 'antd/lib/icon/style/css';
-import 'antd/lib/menu/style/css';
-import 'antd/lib/col/style/css';
-import 'antd/lib/row/style/css';
-import 'antd/lib/button/style/css';
-import { Menu, Icon, Row, Col, Button  } from 'antd';
+import { Menu, Icon, Row, Col, Button, message } from 'antd';
 import { SocialIcon } from 'react-social-icons';
 import { appConfig } from '../../modules/config';
+import { Footer } from './footer';
 
+
+
+// CONSTANTS & DESTRUCTURING
+// ====================================
 const { appName } = appConfig;
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 
+
+// STYLES
+// ====================================
 const styles = StyleSheet.create({
   footerStyles: {
     color: '#666', 
@@ -22,33 +25,58 @@ const styles = StyleSheet.create({
     height: 150, 
     backgroundColor: '#fafafa',
     textAlign: 'center'
-  }
+  },
+  appNavigation: {
+    height: 55, 
+    zIndex: 1000, 
+    paddingLeft: 95, 
+    color: '#fff', 
+    backgroundColor: '#da5347', 
+    borderBottom: '1px solid #e9e9e9'
+  },
+  menuStyles: {
+    height: 54, 
+    backgroundColor: '#da5347', 
+    borderBottom: '0px solid transparent'
+  },
 });
 
-  const iconStyles = {
-    height: 18, 
-    width: 18,
-    marginRight: 5
-  }
+const { footerStyles, appNavigation, menuStyles } = styles;
 
-const { footerStyles } = styles;
 
+
+// METHODS
+// ====================================
+const logout = () => {
+    const hide = message.loading('logging you out...', 0);
+    setTimeout(function(){
+      hide();
+      Meteor.logout(() => browserHistory.push('/'));
+    }, 2000);
+    return;
+}
+
+
+
+// INTERNAL COMPONENTS
+// ====================================
 const AppNavigation = React.createClass({
   getInitialState() {
       return {
         current: this.props.pathname
       };
-    
   },
   handleClick(e) {
+    if (e.key === 'logout') { logout(); return; }
     browserHistory.push(e.key);
     this.setState({ current: e.key });
     return;  
   },
   render() {
+    const { userExists, pathname } = this.props;
     return (
-    <Row className='landing-menu' type="flex" justify="space-around" align="middle"  style={{height: 55, zIndex: 1000, paddingLeft: 95, color: '#fff', backgroundColor: '#da5347', borderBottom: '1px solid #e9e9e9'}}>
-      <Col span='19'>
+    <Row type="flex" justify="space-around" align="middle"  className={css(appNavigation) + ' landing-menu'}>
+      <Col span='16'>
         <Link to='/'>
           <h2 style={{fontSize: 21, color: '#fff'}}>
             {appName}
@@ -56,56 +84,33 @@ const AppNavigation = React.createClass({
           </h2>
         </Link>
       </Col>
-      <Col span='5'>
-        <Menu onClick={this.handleClick} selectedKeys={[this.props.pathname]} mode="horizontal" style={{height: 54, backgroundColor: '#da5347', borderBottom: '0px solid transparent'}}>
-        <Menu.Item style={{height: 54, }} key="/">Home</Menu.Item>
-        <Menu.Item style={{height: 54, }} key="/signup">Signup</Menu.Item>
-        <Menu.Item style={{height: 54, }} key="/login">Login</Menu.Item>
+      <Col span='8'>
+        <Menu onClick={this.handleClick} selectedKeys={[pathname]} mode="horizontal" className={css(menuStyles)}>
+        {!userExists && <Menu.Item style={{height: 54, }} key="/">Home</Menu.Item>}
+        {!userExists && <Menu.Item style={{height: 54, }} key="/contact">Contact</Menu.Item>}
+        {!userExists && <Menu.Item style={{height: 54, }} key="/signup">Signup</Menu.Item>}
+        {!userExists && <Menu.Item style={{height: 54, }} key="/login">Login</Menu.Item>}
+        {userExists && <Menu.Item style={{height: 54, }} key="/profile">Profile</Menu.Item>}
+        {userExists && <Menu.Item style={{height: 54, }} key="logout">Logout</Menu.Item>}
         </Menu>
-      </Col>
-        
-      </Row>
+      </Col>  
+    </Row>
     );
   },
 });
 
 
 
-
-const Footer = () => {
-  return (
-    <Row type="flex" justify="center" align="middle" className={css(footerStyles)}>
-      <Col span='8'>
-      </Col>
-      <Col span='8'>
-      </Col>
-      <Col span={8} style={{textAlign: 'right'}}>
-        <div style={{marginBottom: 10}}>
-          <SocialIcon network="facebook"  style={iconStyles} color={'#666'} />
-          <SocialIcon network="twitter"   style={iconStyles} color={'#666'} />
-          <SocialIcon network="instagram" style={iconStyles} color={'#666'} />
-        </div>
-        <div>
-          <Link style={{marginRight: 10, color: '#888'}}>Privacy Policy</Link>
-          <Link style={{marginRight: 10, color: '#888'}}>Help</Link>
-          <span>&copy; { appName }, 2017</span>
-        </div>
-      </Col>
-    </Row>
-  );
-}
-
-
-
+// EXTERNAL COMPONENTS
+// ====================================
 export const App = React.createClass({
-  
   propTypes: {
     children: React.PropTypes.element.isRequired,
   },
   render() {
     return (
         <div style={{position: 'relative'}}>
-          <AppNavigation  currentPath={this.props.location.pathname}  />
+          <AppNavigation  currentPath={this.props.location.pathname}  userExists={Meteor.userId()} />
             <div style={{minHeight: '100vh'}}>
              { this.props.children }
             </div>
@@ -113,7 +118,6 @@ export const App = React.createClass({
         </div>
     );
   }
-  
 });
 
 

@@ -1,104 +1,61 @@
 import React from 'react';
-import { handleResetPassword } from '../../modules/reset-password';
-import { StyleSheet, css } from 'aphrodite'
-import { Link } from 'react-router';
-import 'antd/lib/form/style/css';
-import 'antd/lib/input/style/css';
-import 'antd/lib/button/style/css';
-import 'antd/lib/card/style/css';
-import 'antd/lib/icon/style/css';
-import 'antd/lib/checkbox/style/css';
-import { Form, Icon, Input, Card, Button, Checkbox } from 'antd';
+import { Link, browserHistory } from 'react-router';
+//modules
+//material-ui stuff
+import { Form, Icon, Modal, Row, Input, Button, Checkbox, Radio , Card, message } from 'antd';
+import { handleRecoverPassword } from '../../modules/recover-password'
+
+
 const FormItem = Form.Item;
 
-const styles = {
-  cardStyles: {
-    width: "50%",
-    padding: "40px",
-    margin: "40px auto",
-    marginTop: "40px", 
-  },
-  textField: {
-    width: "90%"
-  },
-  snackBar: {
-    backgroundColor: "#FF4081"
-  }
-}
-
-
-const ResetPasswordForm = Form.create()(React.createClass({
-  getInitialState () {
-    return {
-      loading: false
-    };
-  },
+const ForgotPassword = Form.create()(React.createClass({
   handleSubmit(e) {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (err) {
-        failure();
+        message.error('error');
       }
       if (!err) {
-        let newPassword = values.newPassword;
-        let repeatNewPassword = values.repeatNewPassword;
-        handleResetPassword(newPassword, repeatNewPassword, this.props.token);
+        let email = values.email;
+        handleRecoverPassword(email);
       }
+      
     });
-
   },
   render() {
-    const { getFieldDecorator } = this.props.form;
-
-    const newPasswordRules = [
-      { required: true, message: 'Please input a new password!' }
-    ];
-
-    const repeatNewPassword = [
-      { required: true, message: 'Please repeat the new password!' }
-    ];
-
+    const { form, onCancel } = this.props;
+    const { getFieldDecorator } = form;
     return (
-      <Form onSubmit={this.handleSubmit} className="login-form">
-        <FormItem>
-          {getFieldDecorator('newPassword', { rules: newPasswordRules })(
-            <Input addonBefore={<Icon type="lock" />} type="password" placeholder="New password" />
+      <div style={{width: 400, margin: 'auto'}}>
+      <Form onSubmit={this.handleSubmit} className="cant-find-form">
+        <FormItem label='Email'>
+          {getFieldDecorator('email', {
+            rules: [{ required: true, message: 'Please input your email!' }],
+          })(
+            <Input placeholder="Email" />
           )}
         </FormItem>
-        <FormItem>
-          {getFieldDecorator('repeatNewPassword', { rules: repeatNewPassword })(
-            <Input addonBefore={<Icon type="lock" />} type="password" placeholder="Repeat new password" />
-          )}
-        </FormItem>
-        <FormItem>
-          <Button loading={this.state.loading} type="primary" htmlType="submit" className={css(styles.loginButton)}>
-            Reset Password
-          </Button>
-        </FormItem>
+        <Button style={{margin: 'auto', textAlign: 'center', textTransform: 'uppercase', padding: '10px 30px', height: 45, border: 'none', color: '#fff', backgroundColor: '#d70b52'}} type="primary" htmlType="submit" className="login-form-button">
+            RECOVER PASSWORD
+        </Button>
       </Form>
+      </div>
     );
-  }
+  },
 }));
 
 
-export class ResetPassword extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = { 
-      canSubmit: false,
-      token: this.props.params.token,
-    }
-  }
 
-  render() {
-    return (
-      <Card style={styles.cardStyles} title={'Reset Your Password'} >
-        <ResetPasswordForm token={this.state.token} />
-      </Card>
-    );
-  }
 
+export const RecoverPassword = () => {
+  return (
+    <div>
+      <ForgotPassword />
+    </div>
+  );
 }
+
+
 
 

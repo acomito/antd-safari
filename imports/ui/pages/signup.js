@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import { handleSignup } from '../../modules/signup';
 import { StyleSheet, css } from 'aphrodite'
-import { Form, Icon, Input, Card, Button, Checkbox } from 'antd';
+import { Form, Icon, Input, Card, Button, Checkbox, Row } from 'antd';
 const FormItem = Form.Item;
 
   const styles = StyleSheet.create({
@@ -37,27 +37,22 @@ const NormalLoginForm = Form.create()(React.createClass({
   handleSubmit(e) {
     e.preventDefault();
     this.setState({loading: true});
+
     const failure = () => {
       this.setState({loading: false});
     }
+
     const sucess = () => {
       this.setState({loading: false});
     }
+
     this.props.form.validateFields((err, values) => {
-      if (err) {
-        failure();
-      }
-      if (!err) {
-        setTimeout(function(){
-          let firstName = values.firstName;
-          let lastName =  values.lastName;
-          let graduationYear =  values.graduationYear;
-          let emailAddress = values.emailAddress;
-          let password = values.password;
-          handleSignup(firstName, lastName, graduationYear, emailAddress, password );
-          sucess();
-        }, 3000);
-      }
+      if (err) { failure(); return; }
+      setTimeout(() => {
+        let { firstName, lastName, emailAddress, password } = values;
+        handleSignup(firstName, lastName, emailAddress, password );
+        sucess();
+      }, 2000);
     });
 
   },
@@ -77,13 +72,6 @@ const NormalLoginForm = Form.create()(React.createClass({
             rules: [{ required: true, message: 'Please input your last name!' }],
           })(
             <Input addonBefore={<Icon type="user" />} placeholder="Last name" />
-          )}
-        </FormItem>
-        <FormItem>
-          {getFieldDecorator('graduationYear', {
-            rules: [{ required: true, message: 'What year will you (hopefully) graduate?' }],
-          })(
-            <Input addonBefore={<Icon type="book" />} placeholder="Graduation Year" />
           )}
         </FormItem>
         <FormItem>
@@ -113,37 +101,17 @@ const NormalLoginForm = Form.create()(React.createClass({
 
 
 
-
-
-export class Signup extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = { canSubmit: false }
-    this.submit = this.submit.bind(this);
-
-  }
-
-  submit(data) {
-    let firstName = data.firstName;
-    let lastName =  data.lastName;
-    let graduationYear =  data.graduationYear;
-    let emailAddress = data.emailAddress;
-    let password = data.password;
-    
-    handleSignup(firstName, lastName, graduationYear, emailAddress, password );
-
-  }
-  render() {
-
-
-    return (
-      <div>
-      <Card className={css(styles.cardStyles) + ' first-step'} title={<p style={{textAlign: 'center'}}>Create a Student Account</p>}>
+export const Signup = () => {
+  return (
+    <Row>
+      <Card 
+        className={css(styles.cardStyles) + ' first-step'} 
+        title={<p style={{textAlign: 'center'}}>Create a Student Account</p>}
+      >
         <NormalLoginForm />
       </Card>
-      </div>
-    );
-  }
+    </Row>
+  );
 }
+
 

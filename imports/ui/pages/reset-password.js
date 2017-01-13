@@ -1,5 +1,9 @@
 import React from 'react';
 import { handleResetPassword } from '../../modules/reset-password';
+import { StyleSheet, css } from 'aphrodite'
+import { Link } from 'react-router';
+import { Form, Icon, Input, Card, Button, Checkbox } from 'antd';
+const FormItem = Form.Item;
 
 const styles = {
   cardStyles: {
@@ -17,8 +21,61 @@ const styles = {
 }
 
 
-export class ResetPassword extends React.Component {
+const ResetPasswordForm = Form.create()(React.createClass({
+  getInitialState () {
+    return {
+      loading: false
+    };
+  },
+  handleSubmit(e) {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (err) {
+        failure();
+      }
+      if (!err) {
+        let newPassword = values.newPassword;
+        let repeatNewPassword = values.repeatNewPassword;
+        handleResetPassword(newPassword, repeatNewPassword, this.props.token);
+      }
+    });
 
+  },
+  render() {
+    const { getFieldDecorator } = this.props.form;
+
+    const newPasswordRules = [
+      { required: true, message: 'Please input a new password!' }
+    ];
+
+    const repeatNewPassword = [
+      { required: true, message: 'Please repeat the new password!' }
+    ];
+
+    return (
+      <Form onSubmit={this.handleSubmit} className="cant-find-form">
+        <FormItem>
+          {getFieldDecorator('newPassword', { rules: newPasswordRules })(
+            <Input addonBefore={<Icon type="lock" />} type="password" placeholder="New password" />
+          )}
+        </FormItem>
+        <FormItem>
+          {getFieldDecorator('repeatNewPassword', { rules: repeatNewPassword })(
+            <Input addonBefore={<Icon type="lock" />} type="password" placeholder="Repeat new password" />
+          )}
+        </FormItem>
+        <FormItem>
+          <Button loading={this.state.loading} type="primary" htmlType="submit" className={css(styles.loginButton)}>
+            Reset Password
+          </Button>
+        </FormItem>
+      </Form>
+    );
+  }
+}));
+
+
+export class ResetPassword extends React.Component {
 
   constructor(props) {
     super(props);
@@ -26,59 +83,15 @@ export class ResetPassword extends React.Component {
       canSubmit: false,
       token: this.props.params.token,
     }
-    this.enableButton = this.enableButton.bind(this);
-    this.submit = this.submit.bind(this);
-    this.disableButton = this.disableButton.bind(this);
-  }
-
-  submit(data) {
-    let newPassword = data.newPassword;
-    let repeatNewPassword = data.repeatNewPassword;
-    handleResetPassword(newPassword, repeatNewPassword, this.state.token);
-  }
-
-  enableButton() {
-    this.setState({ canSubmit: true });
-  }
-
-  disableButton() {
-    this.setState({ canSubmit: false });
   }
 
   render() {
     return (
-      <Card >{/*={styles.cardStyles} >
-      <Snackbar
-            open={true}
-            bodyStyle={styles.snackBar} 
-            autoHideDuration={7000}
-            message="To reset your password, enter a new one. You will be logged in with your new password." 
-        />
-      <CardTitle title="Reset Password" />
-        <Formsy.Form onSubmit={this.submit} onValid={this.enableButton} onInvalid={this.disableButton} className="login">
-            <FormsyText 
-                floatingLabelText="Password" 
-                style={styles.textField} 
-                value="" 
-                name="newPassword" 
-                type="password" 
-                required 
-            />
-            <FormsyText 
-            floatingLabelText="Password" 
-            validations="equalsField:newPassword"
-            validationError="Passwords dont match"
-            style={styles.textField}
-            value="" 
-            name="repeatNewPassword" 
-            type="password" required />
-          <CardActions >
-            <RaisedButton type="submit" secondary={true} label="Reset Password &amp; Login" disabled={!this.state.canSubmit} />
-          </CardActions>
-        </Formsy.Form>*/}
+      <Card style={styles.cardStyles} title={'Reset Your Password'} >
+        <ResetPasswordForm token={this.state.token} />
       </Card>
     );
   }
-}
 
+}
 
