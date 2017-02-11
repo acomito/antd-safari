@@ -85,14 +85,6 @@ const AppNavigation = React.createClass({
         </Link>
       </Col>
       <Col span='8'>
-        <Menu onClick={this.handleClick} selectedKeys={[pathname]} mode="horizontal" className={css(menuStyles)}>
-        {!userExists && <Menu.Item style={{height: 54, }} key="/">Home</Menu.Item>}
-        {!userExists && <Menu.Item style={{height: 54, }} key="/contact">Contact</Menu.Item>}
-        {!userExists && <Menu.Item style={{height: 54, }} key="/signup">Signup</Menu.Item>}
-        {!userExists && <Menu.Item style={{height: 54, }} key="/login">Login</Menu.Item>}
-        {userExists && <Menu.Item style={{height: 54, }} key="/profile">Profile</Menu.Item>}
-        {userExists && <Menu.Item style={{height: 54, }} key="logout">Logout</Menu.Item>}
-        </Menu>
       </Col>  
     </Row>
     );

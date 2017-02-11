@@ -7,7 +7,7 @@
     "test": "meteor test --driver-package practicalmeteor:mocha --port 5000",
     "chimp-watch": "chimp --ddp=http://localhost:3000 --watch --mocha --path=tests",
     "chimp-test": "chimp --ddp=http://localhost:3000 --mocha --path=tests",
-    "staging": "DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy staging.meteor.com --settings settings-development.json",
+    "staging": "DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy https://antd-safari.meteorapp.com --settings settings-development.json",
     "production": "DEPLOY_HOSTNAME=galaxy.meteor.com meteor deploy production.meteor.com --settings settings-production.json"
   },
   "devDependencies": {

@@ -1,4 +1,10 @@
 {
+"galaxy.meteor.com": {
+    "env": {
+    	"ROOT_URL": "https://antd-safari.meteorapp.com",
+      	"MONGO_URL": "mongodb://arcomito:arcomito@ds147979.mlab.com:47979/antd-safari"
+    }
+  },
   "public": {
 	  	"config": {
 	      "appName": "SpaceBug",

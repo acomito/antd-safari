@@ -23,7 +23,11 @@ An Ant Design framework starting point for Meteor/React applications.. (Fork of 
 
 ## Getting Started
 
-* Fill out the settings-development.json file with your app name, support email and support name.
+* git clone this repo
+* run `meteor npm install` which is the meteor equivalent to `npm install` (this will download all npm packages)
+* run the app with `meteor npm start`
+* you should see your app startup on localhost:3000
+* the index page is where the bug is
 
 ## Where's the code?
 
